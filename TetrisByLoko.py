@@ -227,5 +227,5 @@ class SW:
 
             time.sleep(self.retardo)
 
-
+# Instancia
 sw = SW()
