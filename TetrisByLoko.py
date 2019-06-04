@@ -111,15 +111,7 @@ class SW:
     def mov_izq(self):
         if self.piezaActual_x > 0:
             # Procedo a borrar la pieza
-            # Dependiendo de que tan larga sea la pieza empiezo a pintar
-            aux_x = self.piezaActual_x
-            aux_y = self.piezaActual_y
-            for i in self.piezaActual:
-                for j in i:
-                    self.matrixTablero[aux_x][aux_y] = 0
-                    aux_y = aux_y + 1
-                aux_y = self.piezaActual_y
-                aux_x = aux_x + 1
+            self.borrarPieza()
 
             # Procedo a decrementar x
             self.piezaActual_x = self.piezaActual_x - 1
@@ -127,9 +119,22 @@ class SW:
     # Este metodo mueve la pieza a la derecha
     # 1ro se comprueba que no se salga del tablero
     def mov_der(self):
-        pass
+        if self.piezaActual_x + len(self.piezaActual) < 10:
+            self.borrarPieza()
 
-        
+            # Procedo a incrementar la pieza
+            self.piezaActual_x = self.piezaActual_x + 1
+
+    # Este metodo borra la pieza
+    def borrarPieza(self):
+        aux_x = self.piezaActual_x
+        aux_y = self.piezaActual_y
+        for i in self.piezaActual:
+            for j in i:
+                self.matrixTablero[aux_x][aux_y] = 0
+                aux_y = aux_y + 1
+            aux_y = self.piezaActual_y
+            aux_x = aux_x + 1
         
 
     # Se actualiza la miniatura de la sigPieza
@@ -231,9 +236,11 @@ class SW:
         if Event.keysym == "Down":
             print('Abajo')
         if Event.keysym == "Right":
-            print('Derecha')
+            self.mov_der()
+
         if Event.keysym == "Left":
-           self.mov_izq()
+            self.mov_izq()
+           
 
         if Event.keysym == "space":
             if not self.starGame:
