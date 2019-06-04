@@ -1,4 +1,5 @@
 """
+@FelipedelosH
 05 / 31 / 2019
 
 Procedo a crear un tetris
@@ -85,15 +86,57 @@ class SW:
 
     # Este metodo me dice cual sera la sigPieza
     def cualSigPieza(self):
-        self.IDsigPieza = randint(0, len(self.listaDePiezas))
+        # Se procede a escoger la pieza actual
+        self.IDsigPieza = randint(0, len(self.listaDePiezas)-1)
+        self.piezaActual = self.listaDePiezas[self.IDsigPieza]
+
+    # Este metodo procede a poner la pieza en el tablero 
+    # en la pos x, y
+    def ponerPieza(self):
+        # Dependiendo de que tan larga sea la pieza empiezo a pintar
+        aux_x = self.piezaActual_x
+        aux_y = self.piezaActual_y
+        for i in self.piezaActual:
+            for j in i:
+                self.matrixTablero[aux_x][aux_y] = j
+                aux_y = aux_y + 1
+            aux_y = self.piezaActual_y
+            aux_x = aux_x + 1
+
+    # Este metodo mueve la pieza a la derecha
+
+
+    # Este metodo mueve la pieza a la Izquierda
+    # 1ro se comprueba que no se salga del tablero
+    def mov_izq(self):
+        if self.piezaActual_x > 0:
+            # Procedo a borrar la pieza
+            # Dependiendo de que tan larga sea la pieza empiezo a pintar
+            aux_x = self.piezaActual_x
+            aux_y = self.piezaActual_y
+            for i in self.piezaActual:
+                for j in i:
+                    self.matrixTablero[aux_x][aux_y] = 0
+                    aux_y = aux_y + 1
+                aux_y = self.piezaActual_y
+                aux_x = aux_x + 1
+
+            # Procedo a decrementar x
+            self.piezaActual_x = self.piezaActual_x - 1
+
+    # Este metodo mueve la pieza a la derecha
+    # 1ro se comprueba que no se salga del tablero
+    def mov_der(self):
+        pass
+
+        
+        
 
     # Se actualiza la miniatura de la sigPieza
     def actualizarMiniatura(self):
         # Se procede a borrar la pieza anterior
         for i in self.telaInformacion.find_withtag("sigpieza"):
             self.telaInformacion.itemconfig(i, fill='white')
-        
-        
 
         # Se procede a pintar la nueva pieza
         # Pintar el cuadrado
@@ -146,7 +189,7 @@ class SW:
         for i in self.matrixTablero:
             for j in i:
                 if j == 0:
-                    self.telaGame.itemconfig(contador, fill='red')
+                    self.telaGame.itemconfig(contador, fill='white')
                 else:
                     self.telaGame.itemconfig(contador, fill='black')
                 contador = contador + 1
@@ -162,7 +205,6 @@ class SW:
             for j in range(0, 20):
                 x0 = 100 + (i*25)
                 y0 = 10 + (j*25)
-                time.sleep(0)
                 self.telaGame.update()
                 self.telaGame.create_rectangle(x0, y0, x0+25, y0+25, tag="tablerojuego")
                 # Se actualiza la matrix que controla el juego
@@ -191,7 +233,7 @@ class SW:
         if Event.keysym == "Right":
             print('Derecha')
         if Event.keysym == "Left":
-            print('Izquierda')
+           self.mov_izq()
 
         if Event.keysym == "space":
             if not self.starGame:
@@ -220,12 +262,14 @@ class SW:
                     self.piezaActual_y = 0
                     self.piezaActual = self.listaDePiezas[self.IDsigPieza]
                     # Procede a pintar esa pieza
-                    
+                    self.ponerPieza()
                     # Se procede a ponerla como callendo
                     self.piezaCallendo = True
+                else:
+                    self.ponerPieza()
 
 
-            time.sleep(self.retardo)
+            time.sleep(0)
 
 # Instancia
 sw = SW()
